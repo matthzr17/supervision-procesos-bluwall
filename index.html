@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP - Sistema de Supervisión y Auditoría Operativa</title>
+    <title>SOP - Sistema de Supervisión y Auditoría Operativa (Semanales)</title>
     <!-- Tailwind CSS para Estilos Premium -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -89,7 +89,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-lg leading-tight tracking-wide text-white">SOP AUDIT</h1>
-                <p class="text-xs text-slate-400">Supervisión Operativa</p>
+                <p class="text-xs text-slate-400">Ciclos Sábado - Jueves</p>
             </div>
         </div>
 
@@ -152,6 +152,19 @@
         <!-- SECCIONES DE CONTENIDO -->
         <div class="p-6 md:p-8 flex-1 max-w-7xl w-full mx-auto">
             
+            <!-- AVISO DE VIERNES DE RESULTADOS -->
+            <div id="friday-warning-banner" class="hidden bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-start gap-3">
+                    <div class="bg-indigo-600 text-white p-2.5 rounded-xl">
+                        <i data-lucide="info" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-indigo-900 text-sm">🔒 Hoy es Viernes: Presentación de Resultados</h4>
+                        <p class="text-xs text-indigo-800/80 mt-1">El ciclo de auditoría de Sábado a Jueves se encuentra cerrado temporalmente. Hoy no se admiten registros nuevos de control en el panel de supervisión.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- VISTA A: PANEL DE SUPERVISIÓN -->
             <section id="tab-supervision" class="tab-content block space-y-6">
                 <!-- Filtros del Panel -->
@@ -179,15 +192,15 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Stats rápidos del día actual -->
+                    <!-- Stats rápidos del ciclo semanal actual -->
                     <div class="flex gap-4 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
                         <div class="bg-slate-50 rounded-xl px-4 py-3 text-center border border-slate-200">
                             <span class="block text-2xl font-bold text-brand-600" id="supervision-stats-completas">0</span>
-                            <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-500">Completadas Hoy</span>
+                            <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-500">Hechas en la Semana</span>
                         </div>
                         <div class="bg-slate-50 rounded-xl px-4 py-3 text-center border border-slate-200">
                             <span class="block text-2xl font-bold text-slate-400" id="supervision-stats-pendientes">0</span>
-                            <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-500">Pendientes</span>
+                            <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-500">Restantes</span>
                         </div>
                     </div>
                 </div>
@@ -204,7 +217,7 @@
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
                     <div>
                         <h3 class="text-base font-bold text-slate-900">Análisis del Histórico de Auditorías</h3>
-                        <p class="text-xs text-slate-500">Consolidado dinámico de auditorías y calificaciones de los últimos 6 meses.</p>
+                        <p class="text-xs text-slate-500">Métricas consolidadas basadas en ciclos semanales de Sábado a Jueves (últimos 6 meses).</p>
                     </div>
                     <div class="flex gap-2">
                         <select id="analytics-filter-sucursal" onchange="generateCharts()" class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
@@ -232,7 +245,7 @@
                             <i data-lucide="percent" class="w-6 h-6"></i>
                         </div>
                         <div>
-                            <span class="block text-xs text-slate-400 font-semibold uppercase">% Cumplimiento</span>
+                            <span class="block text-xs text-slate-400 font-semibold uppercase">% Cumplimiento Ciclos</span>
                             <span id="kpi-compliance" class="text-2xl font-extrabold text-slate-900">0%</span>
                         </div>
                     </div>
@@ -272,7 +285,7 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2">
                         <h4 class="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
                             <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span>
-                            Evolución Histórica de Auditorías
+                            Evolución Histórica de Auditorías (Ciclos Semanales)
                         </h4>
                         <div class="relative h-64">
                             <canvas id="chart-timeline"></canvas>
@@ -298,7 +311,7 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-1 flex flex-col justify-between">
                         <div>
                             <h3 class="text-lg font-bold text-slate-900 mb-2">Semáforo Operativo</h3>
-                            <p class="text-xs text-slate-500 mb-6">Mide visualmente el estado del cumplimiento general de las sucursales por día.</p>
+                            <p class="text-xs text-slate-500 mb-6">Visualiza la carga diaria de Sábado a Jueves. Los <strong>Viernes (PR)</strong> califican el cumplimiento general acumulado del ciclo que cerró el jueves.</p>
                             
                             <!-- Selectores de Mes / Año -->
                             <div class="space-y-4">
@@ -329,7 +342,7 @@
                                     <span class="block text-xs font-bold text-slate-500 uppercase tracking-wide">Leyenda de Rendimiento:</span>
                                     <div class="flex items-center gap-3">
                                         <span class="w-4 h-4 rounded-full bg-emerald-500 border border-emerald-600 block flex-shrink-0"></span>
-                                        <span class="text-xs text-slate-700 font-medium">Cumplimiento Óptimo</span>
+                                        <span class="text-xs text-slate-700 font-medium">Cumplimiento Óptimo (PR de la semana)</span>
                                     </div>
                                     <div class="flex items-center gap-3">
                                         <span class="w-4 h-4 rounded-full bg-amber-400 border border-amber-500 block flex-shrink-0"></span>
@@ -337,7 +350,11 @@
                                     </div>
                                     <div class="flex items-center gap-3">
                                         <span class="w-4 h-4 rounded-full bg-rose-500 border border-rose-600 block flex-shrink-0"></span>
-                                        <span class="text-xs text-slate-700 font-medium">Sin Registros / Crítico</span>
+                                        <span class="text-xs text-slate-700 font-medium">Ciclo Crítico / Incumplido</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-4 h-4 rounded-full bg-slate-100 border border-slate-200 block flex-shrink-0"></span>
+                                        <span class="text-xs text-slate-700 font-medium">Día sin Auditorías Programadas</span>
                                     </div>
                                 </div>
                             </div>
@@ -347,7 +364,7 @@
                         <div class="mt-6 pt-4 border-t border-slate-100">
                             <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100/50 flex items-start gap-2.5 text-xs text-indigo-800">
                                 <i data-lucide="info" class="w-4.5 h-4.5 text-indigo-600 mt-0.5 flex-shrink-0"></i>
-                                <p>Haz clic en cualquier día marcado para desglosar el listado de las tareas cerradas en esa fecha.</p>
+                                <p>Haz clic en cualquier día marcado con registros o un Viernes de resultados para desglosar la auditoría correspondiente.</p>
                             </div>
                         </div>
                     </div>
@@ -369,7 +386,7 @@
                     <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                         <h4 class="font-bold text-slate-900 flex items-center gap-2">
                             <i data-lucide="list-todo" class="text-brand-600 w-5 h-5"></i>
-                            Tareas Completadas del Día: <span id="detail-selected-date" class="text-brand-600">DD-MM-AAAA</span>
+                            Reporte Detallado: <span id="detail-selected-date" class="text-brand-600">DD-MM-AAAA</span>
                         </h4>
                         <button onclick="document.getElementById('day-detail-section').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
                             <i data-lucide="x" class="w-5 h-5"></i>
@@ -405,12 +422,12 @@
                             <i data-lucide="table" class="w-5 h-5 text-indigo-500"></i>
                             Matriz Operativa Activa de SOP Audit
                         </h3>
-                        <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-200">
-                            Historial Inteligente Protegido
+                        <span class="bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-indigo-200">
+                            Mapeo Semanal de Sábado a Jueves
                         </span>
                     </div>
                     <p class="text-sm text-slate-500 mb-6">
-                        Aquí se listan los procesos y las áreas de control configuradas. Las tareas del <strong>Área Comercial</strong> son dinámicas y se evalúan individualmente por cada asesor asignado. Puedes agregar y remover asesores directamente en el Panel de Supervisión.
+                        Todas las tareas de la matriz se evalúan de forma <strong>Semanal</strong>, recopilándose entre el Sábado y el Jueves para garantizar que el Viernes de Presentación de Resultados se cuente con un reporte final libre de pendientes.
                     </p>
 
                     <div class="overflow-x-auto border border-slate-100 rounded-xl">
@@ -419,8 +436,8 @@
                                 <tr>
                                     <th class="p-4">Área / Proceso</th>
                                     <th class="p-4">Frecuencia</th>
-                                    <th class="p-4">Tipo de Subtarea</th>
-                                    <th class="p-4">Estructura</th>
+                                    <th class="p-4">Tipo de Control</th>
+                                    <th class="p-4">Subtareas Vinculadas</th>
                                 </tr>
                             </thead>
                             <tbody id="matrix-tbody" class="divide-y divide-slate-100">
@@ -456,7 +473,7 @@
                                 </div>
                                 <div>
                                     <h4 class="text-xs font-bold text-teal-900">Analista de IA Integrado</h4>
-                                    <p class="text-[11px] text-teal-800/80 mt-1">Este módulo prepara un reporte estructurado y completo con el desglose de cumplimiento de subtareas y las calificaciones de los asesores, listo para enviarse a ChatGPT, Claude o Gemini.</p>
+                                    <p class="text-[11px] text-teal-800/80 mt-1">Este módulo procesa las auditorías contenidas en los ciclos correspondientes al rango de fechas e inyecta un desglose detallado idóneo para su revisión inmediata por parte de tu modelo de inteligencia artificial de preferencia.</p>
                                 </div>
                             </div>
 
@@ -480,7 +497,7 @@
                                     <span>Copiar</span>
                                 </button>
                             </div>
-                            <textarea id="prompt-textarea" readonly class="flex-1 w-full min-h-[350px] lg:min-h-0 p-4 bg-slate-900 text-slate-200 font-mono text-xs rounded-xl border border-slate-800 leading-relaxed focus:outline-none resize-none" placeholder="Aquí aparecerá el prompt de reporte con subtareas y asesores estructurado..."></textarea>
+                            <textarea id="prompt-textarea" readonly class="flex-1 w-full min-h-[350px] lg:min-h-0 p-4 bg-slate-900 text-slate-200 font-mono text-xs rounded-xl border border-slate-800 leading-relaxed focus:outline-none resize-none" placeholder="Aquí aparecerá el prompt compilado..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -494,9 +511,9 @@
         // --- CONSTANTES ---
         const SUCURSALES = ["Cancún", "Mérida", "San Luis Potosí"];
         const AREAS = ["Administradores de sucursal", "Área Comercial"];
-        const APP_ID = 'sop-audit-system-v2';
+        const APP_ID = 'sop-audit-system-v3';
 
-        // --- ESTRUCTURA INICIAL DE TAREAS Y SUBTAREAS ACTUALIZADA ---
+        // --- ESTRUCTURA INICIAL DE TAREAS Y SUBTAREAS ACTUALIZADA CON SÁBADO-JUEVES ---
         const TAREAS_INICIALES = [
             // --- ADMINISTRADOR DE SUCURSAL ---
             { 
@@ -515,7 +532,7 @@
                 id: "adm-2", 
                 nombre: "Inventario Muestra Diario", 
                 area: "Administradores de sucursal", 
-                frecuencia: "Diaria", 
+                frecuencia: "Semanal", 
                 tipo: "sucursal_bound",
                 subtareas: [
                     { id: "sub-adm-2-cun", nombre: "Inventario Muestra de Sucursal Cancún", sucursal: "Cancún" },
@@ -527,18 +544,24 @@
                 id: "adm-3", 
                 nombre: "Mantenimiento de Vehículos y Montacargas", 
                 area: "Administradores de sucursal", 
-                frecuencia: "Mensual", 
-                tipo: "sucursal_bound_all", // Aplica a las 3 sucursales de forma global
+                frecuencia: "Semanal", 
+                tipo: "sucursal_bound", // AHORA ES SUCURSAL BOUND INDIVIDUAL
                 subtareas: [
-                    { id: "sub-adm-3-mont", nombre: "Mantenimiento de Montacargas" },
-                    { id: "sub-adm-3-vehi", nombre: "Mantenimiento de Vehículos" }
+                    // Montacargas por sucursal
+                    { id: "sub-adm-3-mont-cun", nombre: "Mantenimiento de Montacargas Cancún", sucursal: "Cancún" },
+                    { id: "sub-adm-3-mont-mid", nombre: "Mantenimiento de Montacargas Mérida", sucursal: "Mérida" },
+                    { id: "sub-adm-3-mont-slp", nombre: "Mantenimiento de Montacargas San Luis", sucursal: "San Luis Potosí" },
+                    // Vehículos por sucursal
+                    { id: "sub-adm-3-vehi-cun", nombre: "Mantenimiento de Vehículos Cancún", sucursal: "Cancún" },
+                    { id: "sub-adm-3-vehi-mid", nombre: "Mantenimiento de Vehículos Mérida", sucursal: "Mérida" },
+                    { id: "sub-adm-3-vehi-slp", nombre: "Mantenimiento de Vehículos San Luis", sucursal: "San Luis Potosí" }
                 ]
             },
             { 
                 id: "adm-4", 
                 nombre: "Firma de Salidas - Almacenista/Chofer", 
                 area: "Administradores de sucursal", 
-                frecuencia: "Diaria", 
+                frecuencia: "Semanal", 
                 tipo: "sucursal_bound",
                 subtareas: [
                     { id: "sub-adm-4-cun", nombre: "Firma de Salida Cancún", sucursal: "Cancún" },
@@ -551,7 +574,7 @@
                 id: "com-1", 
                 nombre: "Correcto llenado de seguimientos", 
                 area: "Área Comercial", 
-                frecuencia: "Diaria", 
+                frecuencia: "Semanal", 
                 tipo: "advisor_bound", // Dynamic list of advisors
                 subtareas: [] 
             },
@@ -559,7 +582,7 @@
                 id: "com-2", 
                 nombre: "Correcto llenado de SOCOM", 
                 area: "Área Comercial", 
-                frecuencia: "Diaria", 
+                frecuencia: "Semanal", 
                 tipo: "advisor_bound",
                 subtareas: []
             },
@@ -567,7 +590,7 @@
                 id: "com-3", 
                 nombre: "Rectificar avisos de entrega a cliente", 
                 area: "Área Comercial", 
-                frecuencia: "Diaria", 
+                frecuencia: "Semanal", 
                 tipo: "advisor_bound",
                 subtareas: []
             }
@@ -611,9 +634,30 @@
         document.getElementById('confirm-cancel-btn').onclick = () => closeConfirmModal(false);
         document.getElementById('confirm-ok-btn').onclick = () => closeConfirmModal(true);
 
+        // --- CALCULO MATEMÁTICO DE CICLOS (SÁBADO A JUEVES) ---
+        // Retorna las fechas de inicio y fin del ciclo para un objeto fecha dado.
+        function getWeekCycle(dateObj = new Date()) {
+            const d = new Date(dateObj);
+            const day = d.getDay(); // Dom = 0, Lun = 1, Mar = 2, Mier = 3, Jue = 4, Vier = 5, Sab = 6
+
+            let startSat = new Date(d);
+            // Cuántos días restar para llegar al Sábado inmediato anterior
+            const diffToSat = (day + 1) % 7; 
+            startSat.setDate(d.getDate() - diffToSat);
+            startSat.setHours(0, 0, 0, 0);
+
+            let endThu = new Date(startSat);
+            endThu.setDate(startSat.getDate() + 5); // Sábado + 5 días = Jueves
+            endThu.setHours(23, 59, 59, 999);
+
+            return {
+                start: startSat.toISOString().split('T')[0],
+                end: endThu.toISOString().split('T')[0]
+            };
+        }
+
         // Inicialización y carga de LocalStorage
         function initStorage() {
-            // Cargar o inicializar Tareas
             const savedTasks = localStorage.getItem(`${APP_ID}_tasks`);
             if (savedTasks) {
                 appState.tasks = JSON.parse(savedTasks);
@@ -622,16 +666,14 @@
                 localStorage.setItem(`${APP_ID}_tasks`, JSON.stringify(appState.tasks));
             }
 
-            // Cargar o inicializar Asesores
             const savedAdvisors = localStorage.getItem(`${APP_ID}_advisors`);
             if (savedAdvisors) {
                 appState.advisors = JSON.parse(savedAdvisors);
             } else {
-                appState.advisors = JSON.parse(JSON.stringify(ASESORES_INICIALES)); // Deep copy
+                appState.advisors = JSON.parse(JSON.stringify(ASESORES_INICIALES));
                 localStorage.setItem(`${APP_ID}_advisors`, JSON.stringify(appState.advisors));
             }
 
-            // Cargar o inicializar Historial
             const savedHistory = localStorage.getItem(`${APP_ID}_history`);
             if (savedHistory) {
                 appState.history = JSON.parse(savedHistory);
@@ -640,7 +682,7 @@
             }
         }
 
-        // --- GENERADOR DE HISTORIAL REALISTA (ÚLTIMOS 6 MESES) ---
+        // --- GENERADOR DE HISTORIAL REALISTA (ÚLTIMOS 6 MESES - SÁBADO A JUEVES) ---
         function generateMockHistory() {
             const mockHistory = [];
             const endDate = new Date();
@@ -650,45 +692,43 @@
             const commentTemplatesPositive = [
                 "Todo en orden, documentación cargada a tiempo.",
                 "Excelente orden y limpieza operativa.",
-                "Firma y documentación digital verificado con éxito.",
+                "Firma de bitácora verificada con éxito.",
                 "Formularios completos sin desviaciones."
             ];
 
             const commentTemplatesNegative = [
-                "Retraso menor al reportar las observaciones del día.",
+                "Retraso menor al reportar las observaciones del ciclo.",
                 "Comentarios incompletos en el registro.",
-                "Se detectó una discrepancia de captura, corregida al momento.",
-                "Mantenimiento preventivo se pospuso por logística."
+                "Se detectó un desvío, corregido al momento.",
+                "Mantenimiento se concluyó con ligera demora."
             ];
 
-            // Iterar día por día
-            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-                const dateStr = d.toISOString().split('T')[0];
-                const dayOfWeek = d.getDay();
+            // Avanzar semana a semana (cada 7 días partiendo de un sábado)
+            let currentDay = new Date(startDate);
+            // Ajustar al sábado más cercano
+            const startDayNum = currentDay.getDay();
+            const diffToSat = (startDayNum + 1) % 7;
+            currentDay.setDate(currentDay.getDate() - diffToSat);
 
-                if (dayOfWeek === 0) continue; // Descanso los domingos
+            while (currentDay <= endDate) {
+                const cycle = getWeekCycle(currentDay);
 
                 SUCURSALES.forEach(suc => {
                     appState.tasks.forEach(task => {
-                        let evaluates = false;
+                        // 85% de probabilidad de completar la tarea en cada ciclo de la sucursal
+                        if (Math.random() < 0.85) {
+                            // Asignar un día aleatorio entre Sábado (0) y Jueves (5) de este ciclo
+                            const offsetDays = Math.floor(Math.random() * 6); 
+                            const recordDate = new Date(cycle.start);
+                            recordDate.setDate(recordDate.getDate() + offsetDays);
 
-                        // Determinar evaluaciones según frecuencia
-                        if (task.frecuencia === "Diaria") {
-                            evaluates = Math.random() < 0.75; // 75% de que se audite este día
-                        } else if (task.frecuencia === "Semanal" && dayOfWeek === 5) {
-                            evaluates = Math.random() < 0.85; // 85% de que se audite en viernes
-                        } else if (task.frecuencia === "Mensual" && d.getDate() === 28) {
-                            evaluates = Math.random() < 0.90;
-                        }
-
-                        if (evaluates) {
+                            const dateStr = recordDate.toISOString().split('T')[0];
                             const randomTime = `${String(Math.floor(Math.random() * 4) + 14).padStart(2, '0')}:${String(Math.floor(Math.random() * 59)).padStart(2, '0')}:00`;
 
                             if (task.tipo === "sucursal_bound") {
-                                // Subtareas filtradas para esta sucursal específica
                                 const subs = task.subtareas.filter(s => s.sucursal === suc);
                                 subs.forEach(sub => {
-                                    const cal = Math.random() < 0.85 ? (Math.random() < 0.2 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
+                                    const cal = Math.random() < 0.88 ? (Math.random() < 0.15 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
                                     const com = cal >= 4 ? commentTemplatesPositive[Math.floor(Math.random() * commentTemplatesPositive.length)] : commentTemplatesNegative[Math.floor(Math.random() * commentTemplatesNegative.length)];
 
                                     mockHistory.push({
@@ -706,32 +746,10 @@
                                         comentarios: com
                                     });
                                 });
-                            } else if (task.tipo === "sucursal_bound_all") {
-                                // Aplica a todas
-                                task.subtareas.forEach(sub => {
-                                    const cal = Math.random() < 0.85 ? (Math.random() < 0.2 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
-                                    const com = cal >= 4 ? commentTemplatesPositive[Math.floor(Math.random() * commentTemplatesPositive.length)] : commentTemplatesNegative[Math.floor(Math.random() * commentTemplatesNegative.length)];
-
-                                    mockHistory.push({
-                                        id_registro: 'reg_' + Math.random().toString(36).substr(2, 9),
-                                        id_tarea: task.id,
-                                        nombre_tarea: task.nombre,
-                                        id_subtarea: sub.id,
-                                        nombre_subtarea: sub.nombre,
-                                        area: task.area,
-                                        sucursal: suc,
-                                        fecha_finalizacion: dateStr,
-                                        hora_finalizacion: randomTime,
-                                        responsable_historico: "Encargado de Patio",
-                                        calificacion_estrellas: cal,
-                                        comentarios: com
-                                    });
-                                });
                             } else if (task.tipo === "advisor_bound") {
-                                // Evaluaciones por Asesor
                                 const listAsesores = ASESORES_INICIALES[suc] || [];
                                 listAsesores.forEach(asesor => {
-                                    const cal = Math.random() < 0.85 ? (Math.random() < 0.2 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
+                                    const cal = Math.random() < 0.85 ? (Math.random() < 0.15 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
                                     const com = cal >= 4 ? commentTemplatesPositive[Math.floor(Math.random() * commentTemplatesPositive.length)] : commentTemplatesNegative[Math.floor(Math.random() * commentTemplatesNegative.length)];
 
                                     mockHistory.push({
@@ -753,6 +771,9 @@
                         }
                     });
                 });
+
+                // Avanzar una semana
+                currentDay.setDate(currentDay.getDate() + 7);
             }
 
             appState.history = mockHistory;
@@ -762,9 +783,6 @@
         // --- SALVAR ESTADOS ---
         function saveHistoryToLocalStorage() {
             localStorage.setItem(`${APP_ID}_history`, JSON.stringify(appState.history));
-        }
-        function saveTasksToLocalStorage() {
-            localStorage.setItem(`${APP_ID}_tasks`, JSON.stringify(appState.tasks));
         }
         function saveAdvisorsToLocalStorage() {
             localStorage.setItem(`${APP_ID}_advisors`, JSON.stringify(appState.advisors));
@@ -796,27 +814,27 @@
             switch (tabId) {
                 case 'supervision':
                     titleElem.textContent = 'Panel de Supervisión';
-                    subtitleElem.textContent = 'Control operativo diario de sucursales en tiempo real.';
+                    subtitleElem.textContent = 'Control de tareas semanales de Sábado a Jueves.';
                     renderSupervision();
                     break;
                 case 'analytics':
                     titleElem.textContent = 'Analíticas & KPIs';
-                    subtitleElem.textContent = 'Histórico consolidado de auditorías y calidad.';
+                    subtitleElem.textContent = 'Cumplimiento estratégico semanal de sucursales.';
                     setTimeout(generateCharts, 50);
                     break;
                 case 'calendar':
-                    titleElem.textContent = 'Calendario de Control';
-                    subtitleElem.textContent = 'Desempeño general de sucursales por día calendario.';
+                    titleElem.textContent = 'Semáforo Mensual';
+                    subtitleElem.textContent = 'Estado de los ciclos semanales. Viernes califica el acumulado.';
                     renderCalendar();
                     break;
                 case 'matrix':
-                    titleElem.textContent = 'Configuración de la Matriz';
-                    subtitleElem.textContent = 'Auditoría interna de las tareas y procesos.';
+                    titleElem.textContent = 'Matriz del Sistema';
+                    subtitleElem.textContent = 'Mapeo del checklist y flujos de auditoría.';
                     renderMatrixSettings();
                     break;
                 case 'reports':
-                    titleElem.textContent = 'Reportes e Inteligencia Artificial';
-                    subtitleElem.textContent = 'Prompt listo para análisis de tendencias en IA.';
+                    titleElem.textContent = 'Reportes e IA';
+                    subtitleElem.textContent = 'Consolidado estructurado listo para enviarse a un consultor de IA.';
                     initReportsDateFields();
                     break;
             }
@@ -836,6 +854,15 @@
                     month: '2-digit',
                     year: 'numeric'
                 });
+
+                // Mostrar o esconder el banner de aviso si hoy es Viernes (day === 5)
+                const isFriday = now.getDay() === 5;
+                const banner = document.getElementById('friday-warning-banner');
+                if (isFriday) {
+                    banner.classList.remove('hidden');
+                } else {
+                    banner.classList.add('hidden');
+                }
             }
             setInterval(update, 1000);
             update();
@@ -849,16 +876,16 @@
             
             grid.innerHTML = '';
 
-            const today = new Date().toISOString().split('T')[0];
+            const isFriday = new Date().getDay() === 5;
+            const cycle = getWeekCycle(new Date());
 
-            // Tareas del área seleccionada
             const filteredTasks = appState.tasks.filter(t => t.area === area);
 
             if (filteredTasks.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full py-12 text-center text-slate-400">
                         <i data-lucide="folder-open" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
-                        <p class="text-sm">No hay procesos definidos en la matriz para esta sección.</p>
+                        <p class="text-sm">No hay procesos configurados para esta área.</p>
                     </div>
                 `;
                 lucide.createIcons();
@@ -872,22 +899,21 @@
                 const card = document.createElement('div');
                 card.className = "bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between space-y-4";
 
-                // Tareas Tipo: Sucursal Bound (Administradores)
-                if (task.tipo === "sucursal_bound" || task.tipo === "sucursal_bound_all") {
-                    // Filtrar las subtareas que pertenecen a esta sucursal o que aplican a todas
-                    const activeSubs = task.tipo === "sucursal_bound" 
-                        ? task.subtareas.filter(s => s.sucursal === branch)
-                        : task.subtareas;
+                // Tareas Tipo: Sucursal Bound (Administradores - ahora incluye Mantenimientos específicos por plaza)
+                if (task.tipo === "sucursal_bound") {
+                    const activeSubs = task.subtareas.filter(s => s.sucursal === branch);
 
-                    if (activeSubs.length === 0) return; // Nada que evaluar aquí
+                    if (activeSubs.length === 0) return;
 
                     let subtasksHtml = '';
                     activeSubs.forEach(sub => {
+                        // Buscar si existe un registro en el ciclo actual de Sábado a Jueves
                         const historyRecord = appState.history.find(h => 
                             h.id_tarea === task.id && 
                             h.id_subtarea === sub.id && 
-                            h.fecha_finalizacion === today && 
-                            h.sucursal === branch
+                            h.sucursal === branch &&
+                            h.fecha_finalizacion >= cycle.start &&
+                            h.fecha_finalizacion <= cycle.end
                         );
 
                         const isCompleted = !!historyRecord;
@@ -901,7 +927,7 @@
                                     <h5 class="text-xs font-bold text-slate-700">${sub.nombre}</h5>
                                     ${isCompleted 
                                         ? `<span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold py-0.5 px-2 rounded-full flex items-center gap-0.5">
-                                            <i data-lucide="check" class="w-2.5 h-2.5"></i> Completado
+                                            <i data-lucide="check" class="w-2.5 h-2.5"></i> Auditado
                                            </span>`
                                         : `<span class="bg-slate-200 text-slate-600 text-[9px] font-bold py-0.5 px-2 rounded-full flex items-center gap-0.5">
                                             <span class="w-1 h-1 bg-slate-500 rounded-full"></span> Pendiente
@@ -911,34 +937,41 @@
 
                                 ${!isCompleted ? `
                                     <div class="space-y-3 pt-1">
-                                        <!-- Estrellas -->
-                                        <div>
-                                            <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Calificación de Calidad</label>
-                                            <div class="flex gap-1">
-                                                ${[1, 2, 3, 4, 5].map(star => `
-                                                    <button onclick="setSubtaskRating('${uniqueId}', ${star})" id="${uniqueId}-star-${star}" class="text-slate-300 hover:text-amber-400 transition-colors">
-                                                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                                    </button>
-                                                `).join('')}
+                                        ${isFriday ? `
+                                            <p class="text-[11px] text-indigo-800 font-semibold italic bg-indigo-50 p-2.5 rounded-lg border border-indigo-100">
+                                                Ciclo bloqueado por presentación de resultados de día Viernes.
+                                            </p>
+                                        ` : `
+                                            <!-- Estrellas -->
+                                            <div>
+                                                <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Calificación de Calidad</label>
+                                                <div class="flex gap-1">
+                                                    ${[1, 2, 3, 4, 5].map(star => `
+                                                        <button onclick="setSubtaskRating('${uniqueId}', ${star})" id="${uniqueId}-star-${star}" class="text-slate-300 hover:text-amber-400 transition-colors">
+                                                            <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                                        </button>
+                                                    `).join('')}
+                                                </div>
+                                                <input type="hidden" id="${uniqueId}-rating-val" value="0">
                                             </div>
-                                            <input type="hidden" id="${uniqueId}-rating-val" value="0">
-                                        </div>
 
-                                        <!-- Comentarios -->
-                                        <div>
-                                            <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1 font-semibold">Comentarios / Desviaciones</label>
-                                            <input type="text" id="${uniqueId}-comentarios" placeholder="Observación o confirmación..." class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:ring-1 focus:ring-brand-500 outline-none">
-                                        </div>
+                                            <!-- Comentarios -->
+                                            <div>
+                                                <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Comentarios / Observaciones</label>
+                                                <input type="text" id="${uniqueId}-comentarios" placeholder="Observación detallada o conformidad..." class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:ring-1 focus:ring-brand-500 outline-none">
+                                            </div>
 
-                                        <button onclick="saveSubtaskAudit('${task.id}', '${sub.id}', '${sub.nombre}', '${uniqueId}')" class="w-full py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
-                                            Guardar Subtarea
-                                        </button>
+                                            <button onclick="saveSubtaskAudit('${task.id}', '${sub.id}', '${sub.nombre}', '${uniqueId}')" class="w-full py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                                                Guardar Evaluación
+                                            </button>
+                                        `}
                                     </div>
                                 ` : `
                                     <div class="space-y-1.5 pt-1 text-xs border-t border-slate-100">
-                                        <div class="flex items-center gap-1">
+                                        <div class="flex items-center gap-2">
                                             <span class="text-[10px] text-slate-400">Puntaje:</span>
                                             <span class="text-amber-500 font-bold">${'★'.repeat(historyRecord.calificacion_estrellas)}${'☆'.repeat(5-historyRecord.calificacion_estrellas)}</span>
+                                            <span class="text-[9px] text-slate-400 font-mono">(${historyRecord.fecha_finalizacion})</span>
                                         </div>
                                         <p class="text-[11px] text-slate-500 italic bg-white p-2 rounded-lg border border-slate-100">
                                             "${historyRecord.comentarios || 'Sin comentarios registrados.'}"
@@ -953,7 +986,7 @@
                         <div>
                             <div class="flex items-start justify-between mb-3">
                                 <div>
-                                    <span class="bg-indigo-50 text-indigo-700 text-[9px] font-bold uppercase px-2 py-0.5 rounded border border-indigo-200">${task.frecuencia}</span>
+                                    <span class="bg-indigo-50 text-indigo-700 text-[9px] font-bold uppercase px-2 py-0.5 rounded border border-indigo-200">Ciclo Semanal</span>
                                     <h4 class="text-sm font-bold text-slate-800 mt-1">${task.nombre}</h4>
                                 </div>
                             </div>
@@ -972,8 +1005,9 @@
                         const historyRecord = appState.history.find(h => 
                             h.id_tarea === task.id && 
                             h.nombre_subtarea === asesor && 
-                            h.fecha_finalizacion === today && 
-                            h.sucursal === branch
+                            h.sucursal === branch &&
+                            h.fecha_finalizacion >= cycle.start &&
+                            h.fecha_finalizacion <= cycle.end
                         );
 
                         const isCompleted = !!historyRecord;
@@ -986,12 +1020,10 @@
                                 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2 flex-1 min-w-0 mr-4">
-                                        <div class="relative w-full">
-                                            <input type="text" value="${asesor}" id="${uniqueId}-name" 
-                                                onchange="renameAdvisor('${branch}', '${asesor}', this.value)"
-                                                class="bg-transparent border-b border-transparent hover:border-slate-300 focus:border-brand-500 text-xs font-bold text-slate-700 focus:outline-none w-full py-0.5 truncate"
-                                                title="Haz clic para renombrar asesor">
-                                        </div>
+                                        <input type="text" value="${asesor}" id="${uniqueId}-name" 
+                                            onchange="renameAdvisor('${branch}', '${asesor}', this.value)"
+                                            class="bg-transparent border-b border-transparent hover:border-slate-300 focus:border-brand-500 text-xs font-bold text-slate-700 focus:outline-none w-full py-0.5 truncate"
+                                            title="Haz clic para renombrar asesor">
                                     </div>
 
                                     <div class="flex items-center gap-2 flex-shrink-0">
@@ -1007,34 +1039,41 @@
 
                                 ${!isCompleted ? `
                                     <div class="space-y-3 pt-1 border-t border-slate-100">
-                                        <!-- Estrellas -->
-                                        <div>
-                                            <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Calificación del Asesor</label>
-                                            <div class="flex gap-1">
-                                                ${[1, 2, 3, 4, 5].map(star => `
-                                                    <button onclick="setSubtaskRating('${uniqueId}', ${star})" id="${uniqueId}-star-${star}" class="text-slate-300 hover:text-amber-400 transition-colors">
-                                                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                                    </button>
-                                                `).join('')}
+                                        ${isFriday ? `
+                                            <p class="text-[11px] text-indigo-800 font-semibold italic bg-indigo-50 p-2.5 rounded-lg border border-indigo-100">
+                                                Ciclo cerrado por presentación de resultados (Viernes).
+                                            </p>
+                                        ` : `
+                                            <!-- Estrellas -->
+                                            <div>
+                                                <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Calificación del Asesor</label>
+                                                <div class="flex gap-1">
+                                                    ${[1, 2, 3, 4, 5].map(star => `
+                                                        <button onclick="setSubtaskRating('${uniqueId}', ${star})" id="${uniqueId}-star-${star}" class="text-slate-300 hover:text-amber-400 transition-colors">
+                                                            <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                                        </button>
+                                                    `).join('')}
+                                                </div>
+                                                <input type="hidden" id="${uniqueId}-rating-val" value="0">
                                             </div>
-                                            <input type="hidden" id="${uniqueId}-rating-val" value="0">
-                                        </div>
 
-                                        <!-- Comentarios -->
-                                        <div>
-                                            <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Observaciones del Llenado</label>
-                                            <input type="text" id="${uniqueId}-comentarios" placeholder="Ej: Llenó todos los folios..." class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:ring-1 focus:ring-brand-500 outline-none">
-                                        </div>
+                                            <!-- Comentarios -->
+                                            <div>
+                                                <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Observaciones del Llenado</label>
+                                                <input type="text" id="${uniqueId}-comentarios" placeholder="Ej: Llenó todos los folios..." class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 focus:ring-1 focus:ring-brand-500 outline-none">
+                                            </div>
 
-                                        <button onclick="saveAdvisorAudit('${task.id}', '${asesor}', '${uniqueId}')" class="w-full py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
-                                            Guardar Evaluación Asesor
-                                        </button>
+                                            <button onclick="saveAdvisorAudit('${task.id}', '${asesor}', '${uniqueId}')" class="w-full py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                                                Guardar Evaluación Asesor
+                                            </button>
+                                        `}
                                     </div>
                                 ` : `
                                     <div class="space-y-1.5 pt-1 text-xs border-t border-slate-100">
-                                        <div class="flex items-center gap-1">
+                                        <div class="flex items-center gap-2">
                                             <span class="text-[10px] text-slate-400">Puntaje:</span>
                                             <span class="text-amber-500 font-bold">${'★'.repeat(historyRecord.calificacion_estrellas)}${'☆'.repeat(5-historyRecord.calificacion_estrellas)}</span>
+                                            <span class="text-[9px] text-slate-400 font-mono">(${historyRecord.fecha_finalizacion})</span>
                                         </div>
                                         <p class="text-[11px] text-slate-500 italic bg-white p-2 rounded-lg border border-slate-100">
                                             "${historyRecord.comentarios || 'Sin comentarios registrados.'}"
@@ -1049,7 +1088,7 @@
                         <div>
                             <div class="flex items-start justify-between mb-4 border-b border-slate-100 pb-3">
                                 <div>
-                                    <span class="bg-indigo-50 text-indigo-700 text-[9px] font-bold uppercase px-2 py-0.5 rounded border border-indigo-200">${task.frecuencia}</span>
+                                    <span class="bg-indigo-50 text-indigo-700 text-[9px] font-bold uppercase px-2 py-0.5 rounded border border-indigo-200">Ciclo Semanal</span>
                                     <h4 class="text-sm font-bold text-slate-800 mt-1">${task.nombre}</h4>
                                 </div>
                             </div>
@@ -1075,14 +1114,14 @@
                 grid.appendChild(card);
             });
 
-            // Actualizar panel de estadísticas rápidas del día
+            // Actualizar panel de estadísticas rápidas de la semana
             document.getElementById('supervision-stats-completas').textContent = globalCompleted;
             document.getElementById('supervision-stats-pendientes').textContent = globalPending;
 
             lucide.createIcons();
         }
 
-        // --- MANEJO DEL PANEL DE ESTRELLAS DE SUBTAREAS ---
+        // --- MANEJO DE ESTRELLAS DE SUBTAREAS ---
         function setSubtaskRating(uniqueId, rating) {
             document.getElementById(`${uniqueId}-rating-val`).value = rating;
             for (let i = 1; i <= 5; i++) {
@@ -1109,6 +1148,11 @@
             }
 
             const now = new Date();
+            if (now.getDay() === 5) {
+                showNotification("Ciclo Cerrado", "Hoy es viernes de presentación de resultados. No se admiten registros.", "error");
+                return;
+            }
+
             const dateStr = now.toISOString().split('T')[0];
             const timeStr = now.toTimeString().split(' ')[0];
 
@@ -1128,7 +1172,7 @@
             });
 
             saveHistoryToLocalStorage();
-            showNotification("Registro Guardado", `La subtarea "${subName}" ha sido auditada con éxito.`);
+            showNotification("Registro Guardado", `La subtarea "${subName}" ha sido auditada en este ciclo.`);
             renderSupervision();
         }
 
@@ -1146,6 +1190,11 @@
             }
 
             const now = new Date();
+            if (now.getDay() === 5) {
+                showNotification("Ciclo Cerrado", "Hoy es viernes de presentación de resultados. No se admiten registros.", "error");
+                return;
+            }
+
             const dateStr = now.toISOString().split('T')[0];
             const timeStr = now.toTimeString().split(' ')[0];
 
@@ -1225,6 +1274,10 @@
         }
 
         // --- VISTA B: DASHBOARD DE ANALÍTICAS ---
+        let chartInstanceArea = null;
+        let chartInstanceTimeline = null;
+        let chartInstanceBranch = null;
+
         function generateCharts() {
             const selectedSuc = document.getElementById('analytics-filter-sucursal').value;
             
@@ -1235,31 +1288,26 @@
 
             const totalAudits = filteredHistory.length;
 
-            // --- Calcular Cumplimiento Estimado Proporcional ---
-            const daysInHistory = 180;
-            const weeksInHistory = Math.round(daysInHistory / 7);
+            // --- Calcular Cumplimiento Estimado Proporcional en base a 26 semanas ---
+            const totalWeeksInHistory = 26;
             const sucursalMultiplier = selectedSuc === "Todas" ? SUCURSALES.length : 1;
 
             let expectedCount = 0;
             appState.tasks.forEach(task => {
-                let currentItemWeight = 0;
-
                 if (task.tipo === "sucursal_bound") {
-                    // Solo las ligadas a esta sucursal (ej: 1 subtarea por sucursal)
-                    currentItemWeight = task.frecuencia === "Diaria" ? (daysInHistory - 26) : weeksInHistory;
-                    expectedCount += (currentItemWeight * sucursalMultiplier);
-                } else if (task.tipo === "sucursal_bound_all") {
-                    // Aplica completo (2 subtareas por sucursal)
-                    currentItemWeight = (task.frecuencia === "Diaria" ? (daysInHistory - 26) : 6) * 2;
-                    expectedCount += (currentItemWeight * sucursalMultiplier);
+                    // Cada sucursal tiene un set específico de subtareas asociadas
+                    const associatedSubs = selectedSuc === "Todas"
+                        ? task.subtareas
+                        : task.subtareas.filter(s => s.sucursal === selectedSuc);
+                    
+                    expectedCount += (associatedSubs.length * totalWeeksInHistory);
                 } else if (task.tipo === "advisor_bound") {
-                    // Promediado según el total de asesores
+                    // Total de asesores en las plazas elegidas
                     const baseAdvisorsCount = selectedSuc === "Todas" 
                         ? Object.values(appState.advisors).reduce((acc, val) => acc + val.length, 0)
                         : (appState.advisors[selectedSuc] || []).length;
                     
-                    currentItemWeight = (daysInHistory - 26) * Math.max(1, baseAdvisorsCount);
-                    expectedCount += currentItemWeight;
+                    expectedCount += (Math.max(1, baseAdvisorsCount) * totalWeeksInHistory);
                 }
             });
 
@@ -1287,7 +1335,7 @@
 
             const areaComplianceData = AREAS.map(area => {
                 const completedForArea = filteredHistory.filter(h => h.area === area).length;
-                let expectedForArea = Math.round(expectedCount / 2); // Reparto aproximado
+                let expectedForArea = Math.round(expectedCount / 2); // Reparto proporcional aproximado
                 if (expectedForArea === 0) expectedForArea = 1;
                 let compVal = Math.round((completedForArea / expectedForArea) * 100);
                 return compVal > 100 ? 100 : compVal;
@@ -1342,7 +1390,7 @@
                 data: {
                     labels: chartMonths,
                     datasets: [{
-                        label: 'Evaluaciones Guardadas',
+                        label: 'Auditorías Registradas',
                         data: chartDataAudits,
                         borderColor: '#4f46e5',
                         backgroundColor: 'rgba(79, 70, 229, 0.05)',
@@ -1417,72 +1465,136 @@
             const firstDayIndex = date.getDay();
             const totalDaysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
 
-            // Bloques en blanco del inicio de mes
+            // Bloques vacíos al inicio del mes
             for (let i = 0; i < firstDayIndex; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.className = "h-14 md:h-16 bg-slate-50/50 rounded-lg";
                 grid.appendChild(emptyDay);
             }
 
-            // Días activos
+            // Renderizar los días
             for (let day = 1; day <= totalDaysInMonth; day++) {
+                const dObj = new Date(currentCalendarYear, currentCalendarMonth, day);
                 const dStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const finishedOnDay = appState.history.filter(h => h.fecha_finalizacion === dStr);
-                
-                // Nivel de cumplimiento básico
-                let performanceClass = "bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100";
-                let dotClass = "bg-rose-500";
+                const dayOfWeek = dObj.getDay();
 
-                if (finishedOnDay.length > 0) {
-                    if (finishedOnDay.length >= 4) {
-                        performanceClass = "bg-emerald-50 border-emerald-200 text-emerald-800 hover:bg-emerald-100";
-                        dotClass = "bg-emerald-500";
+                const finishedOnDay = appState.history.filter(h => h.fecha_finalizacion === dStr);
+
+                let cellClass = "bg-slate-50 text-slate-400 border-slate-100 hover:bg-slate-100/50";
+                let dayLabelHtml = `<span class="text-xs font-bold">${day}</span>`;
+                let indicatorHtml = '';
+
+                if (dayOfWeek === 5) {
+                    // ES VIERNES: CALIFICAR EL CICLO COMPLETO QUE ACABA DE CERRAR AYER JUEVES
+                    const cycle = getWeekCycle(dObj);
+                    const cycleHistory = appState.history.filter(h => 
+                        h.fecha_finalizacion >= cycle.start && 
+                        h.fecha_finalizacion <= cycle.end
+                    );
+
+                    // Contabilizar total de subtareas requeridas en todas las sucursales por ciclo
+                    let expectedCycleTasks = 0;
+                    appState.tasks.forEach(t => {
+                        if (t.tipo === "sucursal_bound") {
+                            expectedCycleTasks += t.subtareas.length;
+                        } else if (t.tipo === "advisor_bound") {
+                            const totalAdvisors = Object.values(appState.advisors).reduce((acc, val) => acc + val.length, 0);
+                            expectedCycleTasks += Math.max(1, totalAdvisors);
+                        }
+                    });
+
+                    let percentage = expectedCycleTasks > 0 ? (cycleHistory.length / expectedCycleTasks) : 0;
+                    if (percentage > 1) percentage = 1;
+
+                    let colorTheme = "bg-rose-500 text-white border-rose-600 hover:bg-rose-600";
+                    let stateText = "Crítico";
+
+                    if (percentage >= 0.9) {
+                        colorTheme = "bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700";
+                        stateText = "Óptimo";
+                    } else if (percentage >= 0.4) {
+                        colorTheme = "bg-amber-500 text-slate-900 border-amber-600 hover:bg-amber-600";
+                        stateText = "Parcial";
+                    } else if (cycleHistory.length === 0) {
+                        colorTheme = "bg-rose-600 text-white border-rose-700 hover:bg-rose-700";
+                        stateText = "Sin Registro";
+                    }
+
+                    cellClass = `${colorTheme} border shadow-sm font-semibold`;
+                    dayLabelHtml = `<span class="text-xs font-black">${day}</span>`;
+                    indicatorHtml = `
+                        <div class="flex items-center justify-between w-full mt-1">
+                            <span class="text-[8px] tracking-wider uppercase font-black">RESULTADO (PR)</span>
+                            <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 bg-black/10 rounded">${Math.round(percentage * 100)}%</span>
+                        </div>
+                    `;
+
+                } else {
+                    // DÍAS SÁBADO A JUEVES: MOSTRAR AUDITORÍAS INDIVIDUALES LOGGADAS ESE DÍA
+                    if (finishedOnDay.length > 0) {
+                        cellClass = "bg-indigo-50 text-indigo-800 border-indigo-200 hover:bg-indigo-100";
+                        indicatorHtml = `
+                            <div class="flex items-center gap-1 mt-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                                <span class="text-[9px] font-mono font-bold">${finishedOnDay.length} audit.</span>
+                            </div>
+                        `;
                     } else {
-                        performanceClass = "bg-amber-50 border-amber-200 text-amber-800 hover:bg-amber-100";
-                        dotClass = "bg-amber-400";
+                        // Día vacío
+                        indicatorHtml = `
+                            <span class="text-[8px] text-slate-400 mt-2 font-medium italic">Sin registros</span>
+                        `;
                     }
                 }
 
                 const dayBtn = document.createElement('button');
-                dayBtn.className = `h-14 md:h-16 border rounded-xl p-2 flex flex-col justify-between items-start transition-all cursor-pointer ${performanceClass}`;
-                dayBtn.onclick = () => showDayDetails(dStr, finishedOnDay);
-                dayBtn.innerHTML = `
-                    <span class="text-xs font-bold">${day}</span>
-                    <div class="flex items-center gap-1.5 w-full">
-                        <span class="w-1.5 h-1.5 rounded-full ${dotClass}"></span>
-                        <span class="text-[9px] font-mono font-bold opacity-80">${finishedOnDay.length} regs.</span>
-                    </div>
-                `;
+                dayBtn.className = `h-14 md:h-16 border rounded-xl p-2 flex flex-col justify-between items-start transition-all cursor-pointer ${cellClass}`;
+                
+                if (dayOfWeek === 5) {
+                    // Al hacer clic en el Viernes de Resultados, desglosar todo el ciclo de esa semana
+                    const cycle = getWeekCycle(dObj);
+                    const cycleHistory = appState.history.filter(h => 
+                        h.fecha_finalizacion >= cycle.start && 
+                        h.fecha_finalizacion <= cycle.end
+                    );
+                    dayBtn.onclick = () => showDayDetails(`Ciclo Semanal del ${cycle.start} al ${cycle.end}`, cycleHistory);
+                } else {
+                    dayBtn.onclick = () => showDayDetails(dStr, finishedOnDay);
+                }
 
+                dayBtn.innerHTML = `
+                    ${dayLabelHtml}
+                    ${indicatorHtml}
+                `;
                 grid.appendChild(dayBtn);
             }
         }
 
-        function showDayDetails(dateStr, finishedOnDay) {
+        function showDayDetails(titleStr, records) {
             const detailSection = document.getElementById('day-detail-section');
             const detailTbody = document.getElementById('day-detail-tbody');
             const dateSpan = document.getElementById('detail-selected-date');
 
             detailSection.classList.remove('hidden');
-            dateSpan.textContent = dateStr;
+            dateSpan.textContent = titleStr;
             detailTbody.innerHTML = '';
 
-            if (finishedOnDay.length === 0) {
+            if (records.length === 0) {
                 detailTbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="p-4 text-center text-slate-400 italic">Ningún checklist o evaluación cerrado en esta fecha.</td>
+                        <td colspan="7" class="p-4 text-center text-slate-400 italic">No se encontraron auditorías registradas en esta fecha o ciclo.</td>
                     </tr>
                 `;
                 return;
             }
 
-            const sortedRecords = [...finishedOnDay].sort((a,b) => a.hora_finalizacion.localeCompare(b.hora_finalizacion));
+            const sortedRecords = [...records].sort((a,b) => a.fecha_finalizacion.localeCompare(b.fecha_finalizacion) || a.hora_finalizacion.localeCompare(b.hora_finalizacion));
 
             sortedRecords.forEach(reg => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition-colors";
                 tr.innerHTML = `
-                    <td class="p-3 font-mono text-xs text-slate-600 font-semibold">${reg.hora_finalizacion}</td>
+                    <td class="p-3 font-mono text-xs text-slate-600 font-semibold">${reg.fecha_finalizacion} ${reg.hora_finalizacion}</td>
                     <td class="p-3 text-xs font-bold text-slate-800">${reg.nombre_tarea}</td>
                     <td class="p-3 text-xs font-semibold text-indigo-700">${reg.nombre_subtarea}</td>
                     <td class="p-3"><span class="bg-indigo-50 border border-indigo-100 text-indigo-700 text-[9px] font-bold px-2 py-0.5 rounded-full">${reg.sucursal}</span></td>
@@ -1503,16 +1615,12 @@
                 let subtareasMeta = '';
 
                 if (task.tipo === "sucursal_bound") {
-                    subtareasMeta = `<div class="space-y-1">` + 
-                        task.subtareas.map(s => `<span class="block text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">(${s.sucursal}) ${s.nombre}</span>`).join('') + 
-                        `</div>`;
-                } else if (task.tipo === "sucursal_bound_all") {
-                    subtareasMeta = `<div class="space-y-1">` + 
-                        task.subtareas.map(s => `<span class="block text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-100">Global: ${s.nombre}</span>`).join('') + 
+                    subtareasMeta = `<div class="grid grid-cols-1 gap-1">` + 
+                        task.subtareas.map(s => `<span class="inline-block text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200 truncate">(${s.sucursal}) ${s.nombre}</span>`).join('') + 
                         `</div>`;
                 } else if (task.tipo === "advisor_bound") {
                     subtareasMeta = `<span class="text-xs text-brand-600 font-bold italic flex items-center gap-1">
-                        <i data-lucide="users" class="w-3.5 h-3.5"></i> Gestión Dinámica de Asesores
+                        <i data-lucide="users" class="w-3.5 h-3.5"></i> Listado Dinámico de Asesores Activos
                     </span>`;
                 }
 
@@ -1529,7 +1637,7 @@
                     <td class="p-4">
                         <span class="text-xs font-semibold text-slate-500 uppercase">${task.tipo.replace(/_/g, ' ')}</span>
                     </td>
-                    <td class="p-4 max-w-sm">
+                    <td class="p-4 max-w-md">
                         ${subtareasMeta}
                     </td>
                 `;
@@ -1572,17 +1680,19 @@
                 return;
             }
 
-            let promptText = `PROMPT DE ANÁLISIS OPERATIVO - ESTRUCTURA DE SUBTAREAS Y ASESORES
+            let promptText = `PROMPT DE ANÁLISIS OPERATIVO - ESTRUCTURA DE SUBTAREAS SEMANALES (SÁBADO A JUEVES)
 ========================================================================
 Actúa como Consultor Senior en Operaciones y Calidad de Procesos.
-Analiza la siguiente auditoría interna de nuestras 3 sucursales del período de [${startStr}] al [${endStr}].
+Analiza la siguiente auditoría de nuestras 3 sucursales del período de [${startStr}] al [${endStr}].
+
+Los viernes se dedican exclusivamente a la presentación de resultados semanales, por lo que las tareas deben consolidarse de sábado a jueves.
 
 Buscamos un análisis estratégico estructurado que aborde:
-1. Desempeño Operativo General y cuellos de botella por sucursal.
-2. Comportamiento y métricas del Área Comercial (calificaciones y desviaciones por asesor).
-3. Planes correctivos sugeridos para las subtareas críticas con desvíos recurrentes.
+1. Desempeño Operativo General y cuellos de botella detectados por sucursal.
+2. Comportamiento y métricas del Área Comercial (evaluación de asesores y fallas en el llenado de formatos).
+3. Planes correctivos detallados para procesos que presenten desvíos recurrentes.
 
---- HISTÓRICO DE AUDITORÍA CONSOLIDADO ---\n`;
+--- HISTÓRICO DE AUDITORÍA CONSOLIDADO EN EL RANGO SELECCIONADO ---\n`;
 
             SUCURSALES.forEach(suc => {
                 promptText += `\n[SUCURSAL: ${suc.toUpperCase()}]\n`;
@@ -1605,14 +1715,14 @@ Buscamos un análisis estratégico estructurado que aborde:
                         Object.keys(tasksGrouped).forEach(taskName => {
                             promptText += `    - Proceso: ${taskName}\n`;
                             tasksGrouped[taskName].forEach(sub => {
-                                promptText += `      * ${sub.nombre_subtarea} -> Puntaje: ${sub.calificacion_estrellas}★ | Resp: ${sub.responsable_historico} | Obs: "${sub.comentarios || 'Sin observaciones'}"\n`;
+                                promptText += `      * ${sub.nombre_subtarea} -> Puntaje: ${sub.calificacion_estrellas}★ | Resp: ${sub.responsable_historico} | Obs: "${sub.comentarios || 'Sin observaciones'}" (${sub.fecha_finalizacion})\n`;
                             });
                         });
                     }
                 });
             });
 
-            promptText += `\n--- COMPILADO DE ALERTAS DE CALIDAD (AUDITORÍAS DE 1 A 3 ESTRELLAS) ---\n`;
+            promptText += `\n--- DETALLE DE ALERTA DE CALIDAD CRÍTICA (CALIFICACIONES DE 1 A 3 ESTRELLAS) ---\n`;
             const lowScoreAudits = filteredHistory.filter(h => h.calificacion_estrellas <= 3);
 
             if (lowScoreAudits.length === 0) {
@@ -1623,14 +1733,14 @@ Buscamos un análisis estratégico estructurado que aborde:
                     promptText += `  * Plaza: ${aud.sucursal} | Área: ${aud.area}\n`;
                     promptText += `  * Proceso: ${aud.nombre_tarea} -> Subtarea/Asesor: ${aud.nombre_subtarea}\n`;
                     promptText += `  * Puntaje: ${aud.calificacion_estrellas} estrellas\n`;
-                    promptText += `  * Desviación reportada: "${aud.comentarios || 'Sin comentarios registrados.'}"\n`;
+                    promptText += `  * Desviación reportada: "${aud.comentarios || 'Sin comentarios registrados.'}" (${aud.fecha_finalizacion})\n`;
                 });
             }
 
             promptText += `\n========================================================================\nFIN DEL REPORTE. Procede con el análisis táctico.`;
 
             document.getElementById('prompt-textarea').value = promptText;
-            showNotification("Reporte Generado", "Los datos con estructura de subtareas y asesores se han formato con éxito.");
+            showNotification("Reporte Generado", "Los datos del ciclo actual han sido formateados.");
         }
 
         // Copiar Portapapeles Seguro para entonos iFrame
@@ -1641,9 +1751,9 @@ Buscamos un análisis estratégico estructurado que aborde:
 
             try {
                 document.execCommand('copy');
-                showNotification("Copiado con Éxito", "El prompt del reporte está en tu portapapeles listo para pegarse en tu IA.");
+                showNotification("Copiado con Éxito", "El prompt está listo para pegarse en tu Inteligencia Artificial.");
             } catch (err) {
-                showNotification("Error de Copiado", "No se pudo copiar automáticamente, por favor hazlo manualmente.", "error");
+                showNotification("Error de Copiado", "No se pudo copiar automáticamente, por favor hazlo de forma manual.", "error");
             }
         }
 
