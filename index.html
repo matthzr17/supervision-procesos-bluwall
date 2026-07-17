@@ -505,6 +505,7 @@
                                         <tr>
                                             <th class="p-3">Proceso / Área</th>
                                             <th class="p-3">Frecuencia</th>
+                                            <th class="p-3">Tipo de Vinculación</th>
                                             <th class="p-3">Subtareas de Control</th>
                                             <th class="p-3 text-center">Acciones</th>
                                         </tr>
@@ -608,7 +609,6 @@
 
         // --- ESTRUCTURA DE TAREAS Y SUBTAREAS SEMANALES ---
         const TAREAS_INICIALES = [
-            // --- ADMINISTRADOR DE SUCURSAL ---
             { 
                 id: "adm-1", 
                 nombre: "Inventario Total", 
@@ -660,7 +660,6 @@
                     { id: "sub-adm-4-slp", nombre: "Firma de Salida San Luis", sucursal: "San Luis Potosí" }
                 ]
             },
-            // --- ÁREA COMERCIAL ---
             { 
                 id: "com-1", 
                 nombre: "Correcto llenado de seguimientos", 
@@ -701,6 +700,10 @@
             advisors: {}, 
             history: [] 
         };
+
+        // VARIABLES DE CONTROL DE NAVEGACIÓN Y CALENDARIO
+        let currentCalendarMonth = new Date().getMonth();
+        let currentCalendarYear = new Date().getFullYear();
 
         // --- INSTANCIAS GLOBALES PARA GRÁFICAS ---
         let chartInstanceArea = null;
@@ -769,7 +772,7 @@
             };
         }
 
-        // Inicialización de LocalStorage sin autoinyección de datos simulados
+        // Inicialización de LocalStorage
         function initStorage() {
             const savedTasks = localStorage.getItem(`${APP_ID}_tasks`);
             if (savedTasks) {
@@ -796,7 +799,7 @@
             }
         }
 
-        // --- MANEJADORES DE LA CONSOLA DE SANDBOX ---
+        // --- MANEJADORES DE LA CONSOLA ---
         async function triggerLoadDemoData() {
             const ok = await showConfirmModal(
                 "Cargar Historial Demo", 
@@ -804,7 +807,7 @@
             );
             if (ok) {
                 generateMockHistory();
-                showNotification("Simulación Éxitosa", "Se han generado 6 meses de auditorías ficticias. Recarga para visualizar las analíticas.");
+                showNotification("Simulación Exitosa", "Se han generado 6 meses de auditorías ficticias.");
                 renderSupervision();
                 if (appState.activeTab === 'analytics') generateCharts();
                 if (appState.activeTab === 'calendar') renderCalendar();
@@ -825,7 +828,7 @@
                 localStorage.setItem(`${APP_ID}_tasks`, JSON.stringify(appState.tasks));
                 localStorage.setItem(`${APP_ID}_advisors`, JSON.stringify(appState.advisors));
                 
-                showNotification("Base Limpia", "El sistema de producción se ha reiniciado correctamente.", "success");
+                showNotification("Base Limpia", "El sistema se ha reiniciado correctamente.", "error");
                 renderSupervision();
                 if (appState.activeTab === 'analytics') generateCharts();
                 if (appState.activeTab === 'calendar') renderCalendar();
@@ -833,7 +836,7 @@
             }
         }
 
-        // Generador de simulación (Separado explícitamente a petición del admin)
+        // Generador de simulación histórico
         function generateMockHistory() {
             const mockHistory = [];
             const endDate = new Date();
@@ -894,9 +897,9 @@
                                     });
                                 });
                             } else if (task.tipo === "advisor_bound") {
-                                const listAsesores = ASESORES_INICIALES[suc] || [];
+                                const listAsesores = appState.advisors[suc] || [];
                                 listAsesores.forEach(asesor => {
-                                    const cal = Math.random() < 0.85 ? (Math.random() * 0.15 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
+                                    const cal = Math.random() < 0.85 ? (Math.random() < 0.15 ? 4 : 5) : Math.floor(Math.random() * 3) + 1;
                                     const com = cal >= 4 ? commentTemplatesPositive[Math.floor(Math.random() * commentTemplatesPositive.length)] : commentTemplatesNegative[Math.floor(Math.random() * commentTemplatesNegative.length)];
 
                                     mockHistory.push({
@@ -940,8 +943,6 @@
         // --- NAVEGACIÓN ---
         function switchTab(tabId) {
             appState.activeTab = tabId;
-
-            // Ocultar sidebar móvil al presionar una opción
             toggleSidebar(false);
 
             document.querySelectorAll('.tab-content').forEach(section => {
@@ -993,7 +994,7 @@
             lucide.createIcons();
         }
 
-        // --- RELOJ, FECHA Y DETERMINACIÓN DE ATRASO ---
+        // --- RELOJ Y CONTROL DE BANNER DE RESULTADOS ---
         function runClockAndDate() {
             const clockEl = document.getElementById('live-clock');
             const dateEl = document.getElementById('current-date-header');
@@ -1117,7 +1118,6 @@
                         if (isCompleted) globalCompleted++; else globalPending++;
 
                         const hasDelay = isSubtaskDelayed(task.id, sub.id, branch);
-
                         const uniqueId = `sub-${sub.id}`;
 
                         subtasksHtml += `
@@ -1146,7 +1146,6 @@
                                                 Ciclo bloqueado por presentación de resultados de día Viernes.
                                             </p>
                                         ` : `
-                                            <!-- Estrellas Premium y Táctiles -->
                                             <div>
                                                 <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Calificación de Calidad</label>
                                                 <div class="flex gap-2">
@@ -1159,7 +1158,6 @@
                                                 <input type="hidden" id="${uniqueId}-rating-val" value="0">
                                             </div>
 
-                                            <!-- Comentarios -->
                                             <div>
                                                 <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Comentarios / Observaciones</label>
                                                 <input type="text" id="${uniqueId}-comentarios" placeholder="Observación o conformidad..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:ring-2 focus:ring-brand-500 outline-none">
@@ -1218,12 +1216,10 @@
                         if (isCompleted) globalCompleted++; else globalPending++;
 
                         const hasDelay = isSubtaskDelayed(task.id, subId, branch);
-
                         const uniqueId = `adv-${task.id}-${asesor.replace(/\s+/g, '')}`;
 
                         advisorsHtml += `
                             <div class="p-3.5 rounded-xl border ${isCompleted ? 'border-emerald-100 bg-emerald-50/20' : (hasDelay ? 'border-rose-200 bg-rose-50/20' : 'border-slate-100 bg-slate-50/50')} space-y-3 transition-all duration-300 relative group">
-                                
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-2 flex-1 min-w-0 mr-4">
                                         <input type="text" value="${asesor}" id="${uniqueId}-name" 
@@ -1253,7 +1249,6 @@
                                                 Ciclo cerrado por presentación de resultados (Viernes).
                                             </p>
                                         ` : `
-                                            <!-- Estrellas Premium -->
                                             <div>
                                                 <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Calificación del Asesor</label>
                                                 <div class="flex gap-2">
@@ -1266,7 +1261,6 @@
                                                 <input type="hidden" id="${uniqueId}-rating-val" value="0">
                                             </div>
 
-                                            <!-- Comentarios -->
                                             <div>
                                                 <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Observaciones</label>
                                                 <input type="text" id="${uniqueId}-comentarios" placeholder="Ej: Llenó todos los folios..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:ring-2 focus:ring-brand-500 outline-none">
@@ -1302,7 +1296,6 @@
                                 </div>
                             </div>
 
-                            <!-- Agregar Asesor Rápido -->
                             <div class="flex gap-2 mb-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
                                 <input type="text" id="add-adv-input-${task.id}" placeholder="Nuevo Asesor..." class="flex-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-500">
                                 <button onclick="addNewAdvisor('${branch}', '${task.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] px-3.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors">
@@ -1327,6 +1320,182 @@
             document.getElementById('supervision-stats-pendientes').textContent = globalPending;
 
             lucide.createIcons();
+        }
+
+        // --- MANEJO DE ASESORES DINÁMICOS ---
+        function addNewAdvisor(branch, taskId) {
+            const input = document.getElementById(`add-adv-input-${taskId}`);
+            const name = input.value.trim();
+            if (!name) {
+                showNotification("Error", "El nombre del asesor no puede estar vacío.", "error");
+                return;
+            }
+            if (!appState.advisors[branch]) {
+                appState.advisors[branch] = [];
+            }
+            if (appState.advisors[branch].includes(name)) {
+                showNotification("Error", "Este asesor ya está registrado en esta sucursal.", "error");
+                return;
+            }
+            appState.advisors[branch].push(name);
+            saveAdvisorsToLocalStorage();
+            input.value = '';
+            showNotification("Asesor Agregado", `Se integró a "${name}" correctamente.`);
+            renderSupervision();
+        }
+
+        async function removeAdvisor(branch, advisorName) {
+            const confirmed = await showConfirmModal("Eliminar Asesor", `¿Estás seguro de dar de baja a ${advisorName} de la sucursal ${branch}?`);
+            if (confirmed) {
+                appState.advisors[branch] = appState.advisors[branch].filter(a => a !== advisorName);
+                saveAdvisorsToLocalStorage();
+                showNotification("Baja Completa", `Se eliminó a ${advisorName}.`, "success");
+                renderSupervision();
+            }
+        }
+
+        function renameAdvisor(branch, oldName, newName) {
+            newName = newName.trim();
+            if (!newName) {
+                showNotification("Error", "El nombre no puede estar vacío.", "error");
+                renderSupervision();
+                return;
+            }
+            const idx = appState.advisors[branch].indexOf(oldName);
+            if (idx !== -1) {
+                appState.advisors[branch][idx] = newName;
+                saveAdvisorsToLocalStorage();
+                showNotification("Modificación Exitosa", "Nombre de asesor actualizado.");
+                renderSupervision();
+            }
+        }
+
+        // --- PERSISTENCIA Y EVALUACIÓN DE FORMULARIOS ---
+        function setSubtaskRating(uniqueId, rating) {
+            document.getElementById(`${uniqueId}-rating-val`).value = rating;
+            for (let i = 1; i <= 5; i++) {
+                const starBtn = document.getElementById(`${uniqueId}-star-${i}`);
+                if (i <= rating) {
+                    starBtn.className = "text-amber-400 transition-colors p-1 -m-1";
+                } else {
+                    starBtn.className = "text-slate-200 hover:text-amber-400 transition-colors p-1 -m-1";
+                }
+            }
+        }
+
+        function saveSubtaskAudit(taskId, subId, subName, uniqueId) {
+            const branch = document.getElementById('filter-sucursal').value;
+            const area = document.getElementById('filter-area').value;
+            const rating = parseInt(document.getElementById(`${uniqueId}-rating-val`).value);
+            const comments = document.getElementById(`${uniqueId}-comentarios`).value.trim();
+            const task = appState.tasks.find(t => t.id === taskId);
+
+            if (rating === 0) {
+                showNotification("Calificación Pendiente", "Por favor asigna una calificación de estrellas.", "error");
+                return;
+            }
+
+            const now = new Date();
+            if (now.getDay() === 5) {
+                showNotification("Ciclo Cerrado", "Hoy es viernes de presentación de resultados.", "error");
+                return;
+            }
+
+            const dateStr = now.toISOString().split('T')[0];
+            const timeStr = now.toTimeString().split(' ')[0];
+
+            appState.history.push({
+                id_registro: 'reg_' + Math.random().toString(36).substr(2, 9),
+                id_tarea: taskId,
+                nombre_tarea: task.nombre,
+                id_subtarea: subId,
+                nombre_subtarea: subName,
+                area: area,
+                sucursal: branch,
+                fecha_finalizacion: dateStr,
+                hora_finalizacion: timeStr,
+                responsable_historico: "Supervisor de Turno",
+                calificacion_estrellas: rating,
+                comentarios: comments
+            });
+
+            saveHistoryToLocalStorage();
+            showNotification("Registro Guardado", `La subtarea "${subName}" ha sido guardada.`);
+            renderSupervision();
+        }
+
+        function saveAdvisorAudit(taskId, advisorName, uniqueId) {
+            const branch = document.getElementById('filter-sucursal').value;
+            const area = document.getElementById('filter-area').value;
+            const rating = parseInt(document.getElementById(`${uniqueId}-rating-val`).value);
+            const comments = document.getElementById(`${uniqueId}-comentarios`).value.trim();
+            const task = appState.tasks.find(t => t.id === taskId);
+
+            if (rating === 0) {
+                showNotification("Calificación Pendiente", "Por favor asigna una calificación al asesor.", "error");
+                return;
+            }
+
+            const now = new Date();
+            if (now.getDay() === 5) {
+                showNotification("Ciclo Cerrado", "Hoy es viernes de presentación de resultados.", "error");
+                return;
+            }
+
+            const dateStr = now.toISOString().split('T')[0];
+            const timeStr = now.toTimeString().split(' ')[0];
+
+            appState.history.push({
+                id_registro: 'reg_' + Math.random().toString(36).substr(2, 9),
+                id_tarea: taskId,
+                nombre_tarea: task.nombre,
+                id_subtarea: "asesor_" + advisorName.replace(/\s+/g, ''),
+                nombre_subtarea: advisorName,
+                area: area,
+                sucursal: branch,
+                fecha_finalizacion: dateStr,
+                hora_finalizacion: timeStr,
+                responsable_historico: advisorName,
+                calificacion_estrellas: rating,
+                comentarios: comments
+            });
+
+            saveHistoryToLocalStorage();
+            showNotification("Registro Guardado", `El asesor "${advisorName}" ha sido evaluado.`);
+            renderSupervision();
+        }
+
+        // --- NOTIFICACIONES TOAST FLOATING ---
+        function showNotification(title, message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-white border-emerald-200 text-emerald-800";
+            let icon = "check-circle";
+            if (type === "error") {
+                bgClass = "bg-rose-50 border-rose-200 text-rose-800";
+                icon = "alert-circle";
+            }
+            
+            toast.className = `p-4 rounded-xl border shadow-lg flex items-start gap-3 transform translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <h5 class="font-bold text-xs">${title}</h5>
+                    <p class="text-[11px] opacity-90 mt-0.5">${message}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
         }
 
         // --- FUNCIONES DEL FORMULARIO CRUD MATRIZ ---
@@ -1367,7 +1536,6 @@
             saveTasksToLocalStorage();
             
             document.getElementById('add-process-form').reset();
-            
             showNotification("Creado con Éxito", "El proceso operativo ha sido insertado en la matriz.");
             renderMatrixSettings();
             renderSupervision();
@@ -1379,19 +1547,18 @@
 
             const confirmed = await showConfirmModal(
                 "Eliminar Proceso",
-                `¿Deseas dar de baja "${task.nombre}" de la matriz activa de control? El historial operativo existente NO se eliminará.`
+                `¿Deseas dar de baja "${task.nombre}" de la matriz activa de control? El historial existente NO se eliminará.`
             );
 
             if (confirmed) {
                 appState.tasks = appState.tasks.filter(t => t.id !== taskId);
                 saveTasksToLocalStorage();
-                showNotification("Proceso Eliminado", "La tarea ha sido dada de baja de la matriz activa.", "success");
+                showNotification("Proceso Eliminado", "La tarea ha sido dada de baja de la matriz.", "error");
                 renderMatrixSettings();
                 renderSupervision();
             }
         }
 
-        // --- VISTA D: CONFIGURACIÓN DE MATRIZ ---
         function renderMatrixSettings() {
             const tbody = document.getElementById('matrix-tbody');
             tbody.innerHTML = '';
@@ -1399,7 +1566,7 @@
             if (appState.tasks.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="4" class="p-4 text-center text-slate-400 italic">No hay tareas creadas. Registra una a la izquierda.</td>
+                        <td colspan="5" class="p-4 text-center text-slate-400 italic">No hay tareas creadas. Registra una a la izquierda.</td>
                     </tr>
                 `;
                 return;
@@ -1429,9 +1596,9 @@
                         <span class="bg-indigo-50 border border-indigo-200 text-indigo-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">${task.frecuencia}</span>
                     </td>
                     <td class="p-3">
-                        <span class="text-[10px] font-semibold text-slate-500 uppercase">${task.tipo.replace(/_/g, ' ')}</span>
+                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">${task.tipo.replace(/_/g, ' ')}</span>
                     </td>
-                    <td class="p-3 max-w-[200px]">
+                    <td class="p-3 max-w-[220px]">
                         ${subtareasMeta}
                     </td>
                     <td class="p-3 text-center">
@@ -1446,13 +1613,12 @@
             lucide.createIcons();
         }
 
-        // --- SINCRONIZAR MES Y AÑO DEL CALENDARIO ---
+        // --- SEMÁFORO MENUAL Y CALENDARIO ---
         function initCalendarSelects() {
             document.getElementById('calendar-month-select').value = currentCalendarMonth;
             document.getElementById('calendar-year-select').value = currentCalendarYear;
         }
 
-        // --- CALENDARIO DE CUMPLIMIENTO CON COMPORTAMIENTO SEMANAL ---
         function renderCalendar() {
             currentCalendarMonth = parseInt(document.getElementById('calendar-month-select').value);
             currentCalendarYear = parseInt(document.getElementById('calendar-year-select').value);
@@ -1549,7 +1715,7 @@
                         h.fecha_finalizacion >= cycle.start && 
                         h.fecha_finalizacion <= cycle.end
                     );
-                    dayBtn.onclick = () => showDayDetails(`Ciclo Semanal del ${cycle.start} al ${cycle.end}`, cycleHistory);
+                    dayBtn.onclick = () => showDayDetails(`Ciclo Semanal (${cycle.start} al ${cycle.end})`, cycleHistory);
                 } else {
                     dayBtn.onclick = () => showDayDetails(dStr, finishedOnDay);
                 }
@@ -1562,6 +1728,41 @@
             }
         }
 
+        function showDayDetails(dateLabel, records) {
+            const section = document.getElementById('day-detail-section');
+            const title = document.getElementById('detail-selected-date');
+            const tbody = document.getElementById('day-detail-tbody');
+            
+            title.textContent = dateLabel;
+            tbody.innerHTML = '';
+            
+            if (records.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-4 text-center text-slate-400 italic">No hay registros de auditoría para este día o ciclo.</td>
+                    </tr>
+                `;
+            } else {
+                records.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors";
+                    tr.innerHTML = `
+                        <td class="p-2.5 font-mono text-[11px]">${r.fecha_finalizacion} ${r.hora_finalizacion || ''}</td>
+                        <td class="p-2.5 font-semibold">${r.nombre_tarea}</td>
+                        <td class="p-2.5">${r.nombre_subtarea}</td>
+                        <td class="p-2.5"><span class="bg-slate-100 border px-1.5 py-0.5 rounded text-[10px] font-bold text-slate-600">${r.sucursal}</span></td>
+                        <td class="p-2.5 text-slate-500">${r.responsable_historico || 'N/A'}</td>
+                        <td class="p-2.5 text-amber-500 font-bold">${'★'.repeat(r.calificacion_estrellas)}</td>
+                        <td class="p-2.5 text-slate-500 italic max-w-xs truncate" title="${r.comentarios || ''}">${r.comentarios || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
         // --- DASHBOARD DE ANALÍTICAS: GENERAR GRÁFICAS ---
         function generateCharts() {
             const selectedSuc = document.getElementById('analytics-filter-sucursal').value;
@@ -1572,7 +1773,6 @@
             }
 
             const totalAudits = filteredHistory.length;
-
             const daysInHistory = 180;
             const weeksInHistory = Math.round(daysInHistory / 7);
 
@@ -1596,7 +1796,6 @@
 
             const totalStars = filteredHistory.reduce((sum, item) => sum + item.calificacion_estrellas, 0);
             const avgStars = totalAudits > 0 ? (totalStars / totalAudits).toFixed(1) : "0.0";
-
             const criticalAlerts = filteredHistory.filter(h => h.calificacion_estrellas <= 3).length;
 
             document.getElementById('kpi-total').textContent = totalAudits.toLocaleString();
@@ -1716,343 +1915,83 @@
             });
         }
 
-        // --- CALIFICACIONES Y LOGICA DE REGISTROS ---
-        function setSubtaskRating(uniqueId, rating) {
-            document.getElementById(`${uniqueId}-rating-val`).value = rating;
-            for (let i = 1; i <= 5; i++) {
-                const starBtn = document.getElementById(`${uniqueId}-star-${i}`);
-                if (i <= rating) {
-                    starBtn.className = "text-amber-400 transition-colors p-1 -m-1";
-                } else {
-                    starBtn.className = "text-slate-200 hover:text-amber-400 transition-colors p-1 -m-1";
-                }
-            }
-        }
-
-        function saveSubtaskAudit(taskId, subId, subName, uniqueId) {
-            const branch = document.getElementById('filter-sucursal').value;
-            const area = document.getElementById('filter-area').value;
-            const rating = parseInt(document.getElementById(`${uniqueId}-rating-val`).value);
-            const comments = document.getElementById(`${uniqueId}-comentarios`).value.trim();
-            const task = appState.tasks.find(t => t.id === taskId);
-
-            if (rating === 0) {
-                showNotification("Calificación Pendiente", "Por favor asigna una calificación de estrellas.", "error");
-                return;
-            }
-
-            const now = new Date();
-            if (now.getDay() === 5) {
-                showNotification("Ciclo Cerrado", "Hoy es viernes de presentación de resultados. No se admiten registros.", "error");
-                return;
-            }
-
-            const dateStr = now.toISOString().split('T')[0];
-            const timeStr = now.toTimeString().split(' ')[0];
-
-            appState.history.push({
-                id_registro: 'reg_' + Math.random().toString(36).substr(2, 9),
-                id_tarea: taskId,
-                nombre_tarea: task.nombre,
-                id_subtarea: subId,
-                nombre_subtarea: subName,
-                area: area,
-                sucursal: branch,
-                fecha_finalizacion: dateStr,
-                hora_finalizacion: timeStr,
-                responsable_historico: "Supervisor de Turno",
-                calificacion_estrellas: rating,
-                comentarios: comments
-            });
-
-            saveHistoryToLocalStorage();
-            showNotification("Registro Guardado", `La subtarea "${subName}" ha sido auditada en este ciclo.`);
-            renderSupervision();
-        }
-
-        function saveAdvisorAudit(taskId, advisorName, uniqueId) {
-            const branch = document.getElementById('filter-sucursal').value;
-            const area = document.getElementById('filter-area').value;
-            const rating = parseInt(document.getElementById(`${uniqueId}-rating-val`).value);
-            const comments = document.getElementById(`${uniqueId}-comentarios`).value.trim();
-            const task = appState.tasks.find(t => t.id === taskId);
-
-            if (rating === 0) {
-                showNotification("Calificación Pendiente", "Por favor asigna una calificación al asesor.", "error");
-                return;
-            }
-
-            const now = new Date();
-            if (now.getDay() === 5) {
-                showNotification("Ciclo Cerrado", "Hoy es viernes de presentación de resultados. No se admiten registros.", "error");
-                return;
-            }
-
-            const dateStr = now.toISOString().split('T')[0];
-            const timeStr = now.toTimeString().split(' ')[0];
-
-            appState.history.push({
-                id_registro: 'reg_' + Math.random().toString(36).substr(2, 9),
-                id_tarea: taskId,
-                nombre_tarea: task.nombre,
-                id_subtarea: "asesor_" + advisorName.replace(/\s+/g, ''),
-                nombre_subtarea: advisorName,
-                area: area,
-                sucursal: branch,
-                fecha_finalizacion: dateStr,
-                hora_finalizacion: timeStr,
-                responsable_historico: advisorName,
-                calificacion_estrellas: rating,
-                comentarios: comments
-            });
-
-            saveHistoryToLocalStorage();
-            showNotification("Asesor Evaluado", `Calificación guardada para ${advisorName}.`);
-            renderSupervision();
-        }
-
-        function addNewAdvisor(branch, taskId) {
-            const inputEl = document.getElementById(`add-adv-input-${taskId}`);
-            const name = inputEl.value.trim();
-
-            if (!name) {
-                showNotification("Error", "Ingresa un nombre válido de asesor.", "error");
-                return;
-            }
-
-            if (!appState.advisors[branch]) {
-                appState.advisors[branch] = [];
-            }
-
-            if (appState.advisors[branch].includes(name)) {
-                showNotification("Duplicado", "Este asesor ya está registrado en la plaza.", "error");
-                return;
-            }
-
-            appState.advisors[branch].push(name);
-            saveAdvisorsToLocalStorage();
-            inputEl.value = '';
-            showNotification("Asesor Registrado", `"${name}" se ha añadido a la plantilla de ${branch}.`);
-            renderSupervision();
-        }
-
-        async function removeAdvisor(branch, name) {
-            const confirmed = await showConfirmModal(
-                "Desvincular Asesor",
-                `¿Deseas quitar a "${name}" de la lista de asesores activos en ${branch}? No perderás su historial guardado.`
-            );
-
-            if (confirmed) {
-                appState.advisors[branch] = appState.advisors[branch].filter(a => a !== name);
-                saveAdvisorsToLocalStorage();
-                showNotification("Asesor Eliminado", `Se removió a ${name} de ${branch}.`);
-                renderSupervision();
-            }
-        }
-
-        function renameAdvisor(branch, oldName, newName) {
-            const cleanNewName = newName.trim();
-            if (!cleanNewName || cleanNewName === oldName) return;
-
-            const index = appState.advisors[branch].indexOf(oldName);
-            if (index !== -1) {
-                appState.advisors[branch][index] = cleanNewName;
-                saveAdvisorsToLocalStorage();
-                showNotification("Nombre Actualizado", `El asesor "${oldName}" ahora es "${cleanNewName}".`);
-                renderSupervision();
-            }
-        }
-
-        function showDayDetails(titleStr, records) {
-            const detailSection = document.getElementById('day-detail-section');
-            const detailTbody = document.getElementById('day-detail-tbody');
-            const dateSpan = document.getElementById('detail-selected-date');
-
-            detailSection.classList.remove('hidden');
-            dateSpan.textContent = titleStr;
-            detailTbody.innerHTML = '';
-
-            if (records.length === 0) {
-                detailTbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="p-4 text-center text-slate-400 italic">No se encontraron auditorías registradas en esta fecha o ciclo.</td>
-                    </tr>
-                `;
-                return;
-            }
-
-            const sortedRecords = [...records].sort((a,b) => a.fecha_finalizacion.localeCompare(b.fecha_finalizacion) || a.hora_finalizacion.localeCompare(b.hora_finalizacion));
-
-            sortedRecords.forEach(reg => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition-colors";
-                tr.innerHTML = `
-                    <td class="p-3 font-mono text-xs text-slate-600 font-semibold">${reg.fecha_finalizacion} ${reg.hora_finalizacion}</td>
-                    <td class="p-3 text-xs font-bold text-slate-800">${reg.nombre_tarea}</td>
-                    <td class="p-3 text-xs font-semibold text-indigo-700">${reg.nombre_subtarea}</td>
-                    <td class="p-3"><span class="bg-indigo-50 border border-indigo-100 text-indigo-700 text-[9px] font-bold px-2 py-0.5 rounded-full">${reg.sucursal}</span></td>
-                    <td class="p-3 text-xs text-slate-600 font-medium">${reg.responsable_historico}</td>
-                    <td class="p-3 text-amber-500 font-bold text-xs">${'★'.repeat(reg.calificacion_estrellas)}</td>
-                    <td class="p-3 text-xs text-slate-500 italic max-w-xs truncate" title="${reg.comentarios}">${reg.comentarios || '-'}</td>
-                `;
-                detailTbody.appendChild(tr);
-            });
-        }
-
+        // --- MÓDULO DE REPORTES E INTELIGENCIA ARTIFICIAL ---
         function initReportsDateFields() {
-            const today = new Date();
-            const lastWeek = new Date();
-            lastWeek.setDate(today.getDate() - 7);
-
-            document.getElementById('report-date-start').value = lastWeek.toISOString().split('T')[0];
-            document.getElementById('report-date-end').value = today.toISOString().split('T')[0];
+            const startInput = document.getElementById('report-date-start');
+            const endInput = document.getElementById('report-date-end');
+            
+            if (!startInput.value || !endInput.value) {
+                const today = new Date();
+                const past = new Date();
+                past.setDate(today.getDate() - 30);
+                
+                startInput.value = past.toISOString().split('T')[0];
+                endInput.value = today.toISOString().split('T')[0];
+            }
         }
 
         function generateIAReport() {
-            const startStr = document.getElementById('report-date-start').value;
-            const endStr = document.getElementById('report-date-end').value;
-
-            if (!startStr || !endStr) {
-                showNotification("Fechas Requeridas", "Debe ingresar el periodo completo.", "error");
-                return;
-            }
-
-            const start = new Date(startStr + 'T00:00:00');
-            const end = new Date(endStr + 'T23:59:59');
-
-            const filteredHistory = appState.history.filter(h => {
-                const itemDate = new Date(h.fecha_finalizacion + 'T00:00:00');
-                return itemDate >= start && itemDate <= end;
-            });
-
-            if (filteredHistory.length === 0) {
-                document.getElementById('prompt-textarea').value = "### NO SE ENCONTRARON REGISTROS OPERATIVOS EN EL RANGO SELECCIONADO ###";
-                showNotification("Sin Datos", "Prueba expandiendo el periodo.", "error");
-                return;
-            }
-
-            let promptText = `PROMPT DE ANÁLISIS OPERATIVO - ESTRUCTURA DE SUBTAREAS SEMANALES (SÁBADO A JUEVES)
-========================================================================
-Actúa como Consultor Senior en Operaciones y Calidad de Procesos.
-Analiza la siguiente auditoría de nuestras 3 sucursales del período de [${startStr}] al [${endStr}].
-
-Los viernes se dedican exclusivamente a la presentación de resultados semanales, por lo que las tareas deben consolidarse de sábado a jueves.
-
-Buscamos un análisis estratégico estructurado que aborde:
-1. Desempeño Operativo General y cuellos de botella detectados por sucursal.
-2. Comportamiento y métricas del Área Comercial (evaluación de asesores y fallas en el llenado de formatos).
-3. Planes correctivos detallados para procesos que presenten desvíos recurrentes.
-
---- HISTÓRICO DE AUDITORÍA CONSOLIDADO ---\n`;
-
-            SUCURSALES.forEach(suc => {
-                promptText += `\n[SUCURSAL: ${suc.toUpperCase()}]\n`;
-                
-                AREAS.forEach(area => {
-                    promptText += `  Área: ${area}\n`;
-                    const areaHistory = filteredHistory.filter(h => h.sucursal === suc && h.area === area);
-
-                    if (areaHistory.length === 0) {
-                        promptText += `    * Sin auditorías guardadas en este periodo.\n`;
-                    } else {
-                        const tasksGrouped = {};
-                        areaHistory.forEach(item => {
-                            if (!tasksGrouped[item.nombre_tarea]) {
-                                tasksGrouped[item.nombre_tarea] = [];
-                            }
-                            tasksGrouped[item.nombre_tarea].push(item);
-                        });
-
-                        Object.keys(tasksGrouped).forEach(taskName => {
-                            promptText += `    - Proceso: ${taskName}\n`;
-                            tasksGrouped[taskName].forEach(sub => {
-                                promptText += `      * ${sub.nombre_subtarea} -> Puntaje: ${sub.calificacion_estrellas}★ | Resp: ${sub.responsable_historico} | Obs: "${sub.comentarios || 'Sin observaciones'}" (${sub.fecha_finalizacion})\n`;
-                            });
-                        });
-                    }
-                });
-            });
-
-            promptText += `\n--- DETALLE DE ALERTA DE CALIDAD CRÍTICA (CALIFICACIONES DE 1 A 3 ESTRELLAS) ---\n`;
-            const lowScoreAudits = filteredHistory.filter(h => h.calificacion_estrellas <= 3);
-
-            if (lowScoreAudits.length === 0) {
-                promptText += `¡Excelente! No se registraron calificaciones inferiores a 4 estrellas en este rango.\n`;
-            } else {
-                lowScoreAudits.forEach((aud, idx) => {
-                    promptText += `\nDesvío #${idx+1}:\n`;
-                    promptText += `  * Plaza: ${aud.sucursal} | Área: ${aud.area}\n`;
-                    promptText += `  * Proceso: ${aud.nombre_tarea} -> Subtarea/Asesor: ${aud.nombre_subtarea}\n`;
-                    promptText += `  * Puntaje: ${aud.calificacion_estrellas} estrellas\n`;
-                    promptText += `  * Desviación reportada: "${aud.comentarios || 'Sin comentarios registrados.'}" (${aud.fecha_finalizacion})\n`;
-                });
-            }
-
-            promptText += `\n========================================================================\nFIN DEL REPORTE. Procede con el análisis táctico.`;
-
-            document.getElementById('prompt-textarea').value = promptText;
-            showNotification("Reporte Generado", "Los datos del ciclo actual han sido formateados.");
-        }
-
-        function copyToClipboard(elementId) {
-            const textarea = document.getElementById(elementId);
-            textarea.select();
-            textarea.setSelectionRange(0, 99999);
-
-            try {
-                document.execCommand('copy');
-                showNotification("Copiado con Éxito", "El prompt está listo para pegarse en tu Inteligencia Artificial.");
-            } catch (err) {
-                showNotification("Error de Copiado", "No se pudo copiar automáticamente, por favor hazlo de forma manual.", "error");
-            }
-        }
-
-        function showNotification(title, message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
+            const start = document.getElementById('report-date-start').value;
+            const end = document.getElementById('report-date-end').value;
+            const textarea = document.getElementById('prompt-textarea');
             
-            const bgClass = type === 'success' ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200';
-            const textClass = type === 'success' ? 'text-emerald-800' : 'text-rose-800';
-            const iconClass = type === 'success' ? 'text-emerald-500' : 'text-rose-500';
-            const iconName = type === 'success' ? 'check-circle' : 'alert-circle';
-
-            toast.className = `flex items-start gap-3 p-3.5 rounded-xl border ${bgClass} shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
-            toast.innerHTML = `
-                <div class="${iconClass} flex-shrink-0">
-                    <i data-lucide="${iconName}" class="w-4.5 h-4.5"></i>
-                </div>
-                <div class="flex-1">
-                    <h4 class="text-xs font-bold ${textClass}">${title}</h4>
-                    <p class="text-[10px] ${textClass} opacity-90 mt-0.5">${message}</p>
-                </div>
-                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600 flex-shrink-0">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            `;
-
-            container.appendChild(toast);
-            lucide.createIcons();
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3500);
+            if (!start || !end) {
+                showNotification("Error", "Por favor selecciona el rango de fechas.", "error");
+                return;
+            }
+            
+            const filtered = appState.history.filter(h => h.fecha_finalizacion >= start && h.fecha_finalizacion <= end);
+            
+            let promptText = `Eres un consultor experto en auditoría operativa y control de calidad. Analiza el siguiente reporte consolidado de cumplimiento operativo correspondiente al periodo del ${start} al ${end}.\n\n`;
+            promptText += `RESUMEN DE MÉTRICAS:\n`;
+            promptText += `- Total de evaluaciones registradas: ${filtered.length}\n`;
+            
+            const totalStars = filtered.reduce((sum, item) => sum + item.calificacion_estrellas, 0);
+            const avg = filtered.length > 0 ? (totalStars / filtered.length).toFixed(2) : "0.0";
+            promptText += `- Calificación promedio general: ${avg} de 5 estrellas\n`;
+            
+            const alerts = filtered.filter(h => h.calificacion_estrellas <= 3);
+            promptText += `- Evaluaciones críticas (3 estrellas o menos): ${alerts.length}\n\n`;
+            
+            promptText += `DETALLE DE EVALUACIONES REGISTRADAS:\n`;
+            if (filtered.length === 0) {
+                promptText += `No se encontraron registros en este rango de fechas.\n`;
+            } else {
+                filtered.forEach((r, idx) => {
+                    promptText += `[${idx + 1}] Fecha: ${r.fecha_finalizacion} | Sucursal: ${r.sucursal} | Área: ${r.area} | Tarea: ${r.nombre_tarea} -> ${r.nombre_subtarea} | Calificación: ${r.calificacion_estrellas}★ | Comentarios: ${r.comentarios || 'Sin observaciones'}\n`;
+                });
+            }
+            
+            promptText += `\nTAREA:\nPor favor, genera un análisis ejecutivo identificando los principales cuellos de botella por sucursal, los asesores o áreas con menor desempeño, patrones de alertas críticas y 3 recomendaciones estratégicas claras para mejorar la adherencia operativa en el próximo ciclo semanal.`;
+            
+            textarea.value = promptText;
+            showNotification("Reporte Generado", "El prompt estructurado está listo para copiarse.");
         }
 
-        // --- CARGA INICIAL DE LA APP ---
-        window.onload = function() {
+        function copyToClipboard(id) {
+            const textarea = document.getElementById(id);
+            if (!textarea.value) {
+                showNotification("Error", "No hay contenido para copiar.", "error");
+                return;
+            }
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(textarea.value)
+                .then(() => {
+                    showNotification("Copiado", "Contenido copiado al portapapeles.");
+                })
+                .catch(() => {
+                    showNotification("Error", "No se pudo copiar automáticamente.", "error");
+                });
+        }
+
+        // --- ENTRADA EN ACCIÓN AL CARGAR EL CONTENIDO ---
+        window.addEventListener('DOMContentLoaded', () => {
             initStorage();
-            runClockAndDate();
             initCalendarSelects();
-            renderSupervision();
-            lucide.createIcons();
-        }
+            runClockAndDate();
+            switchTab('supervision');
+        });
     </script>
 </body>
 </html>
